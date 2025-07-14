@@ -4,113 +4,130 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kalkulator Silang Togel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       font-family: 'Inter', sans-serif;
-      background: #f4f4f4;
-      color: #333;
+    }
+    body {
+      background: #f6f9fc;
       margin: 0;
-      padding: 0;
+      padding: 2rem;
       display: flex;
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
     }
-
     .container {
       background: white;
-      padding: 40px;
-      margin-top: 50px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
-      width: 90%;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
     }
-
     h1 {
-      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 800;
       color: #222;
-      margin-bottom: 30px;
+      text-align: center;
+      margin-bottom: 0.5rem;
     }
-
+    p.subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
     textarea {
       width: 100%;
-      height: 120px;
-      font-size: 16px;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 1rem;
+      font-size: 1rem;
       border: 1px solid #ccc;
+      border-radius: 12px;
       resize: none;
-      margin-bottom: 20px;
+      min-height: 120px;
     }
-
     button {
-      background-color: #2d89ef;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
+      margin-top: 1rem;
       width: 100%;
-      transition: background-color 0.3s ease;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      background-color: #2563eb;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
-
     button:hover {
-      background-color: #1b64c3;
+      background-color: #1e40af;
     }
-
-    .hasil {
-      margin-top: 30px;
-      background: #fafafa;
-      padding: 20px;
+    .result {
+      margin-top: 2rem;
+      background: #f1f5f9;
+      border-left: 6px solid #2563eb;
+      padding: 1rem;
       border-radius: 8px;
-      border: 1px solid #e0e0e0;
-      white-space: pre-wrap;
-      font-size: 15px;
+    }
+    .result p {
+      margin: 0.5rem 0;
+      font-size: 1.05rem;
+    }
+    .result strong {
+      color: #111;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🔮 Kalkulator Silang Togel</h1>
-    <p>Masukkan 10 angka 4D terakhir (pisahkan dengan koma):</p>
-    <textarea id="input10" placeholder="Contoh: 4123,9801,7634,..."></textarea>
-    <button onclick="prediksi4D()">🎯 Prediksi Angka Jitu</button>
-    <div class="hasil" id="output"></div>
+    <p class="subtitle">Masukkan 10 angka 4D terakhir (pisahkan dengan koma)</p>
+    <textarea id="inputAngka" placeholder="Contoh: 4123,9801,7634,..."></textarea>
+    <button onclick="prediksiUtamaCadangan()">🎯 Prediksi Sekarang</button>
+    <div id="hasil" class="result" style="display:none;"></div>
   </div>
 
   <script>
-    function prediksi4D() {
-      const rawInput = document.getElementById("input10").value;
-      const angkaList = rawInput.split(',').map(s => s.trim()).filter(s => /^\d{4}$/.test(s));
+    function prediksiUtamaCadangan() {
+      const input = document.getElementById('inputAngka').value;
+      const hasil = document.getElementById('hasil');
+      const angkaArray = input.split(',').map(a => a.trim()).filter(a => a.length === 4);
 
-      if (angkaList.length !== 10) {
-        document.getElementById("output").innerText = "Harus 10 angka 4D valid (cth: 1234,5678,...).";
+      if (angkaArray.length !== 10) {
+        alert('Masukkan tepat 10 angka 4D.');
         return;
       }
 
-      const frekuensi = Array(10).fill(0);
+      const digitCount = {};
+      let allDigits = [];
 
-      angkaList.forEach(angka => {
-        angka.split('').forEach(d => {
-          frekuensi[parseInt(d)]++;
+      angkaArray.forEach(num => {
+        num.split('').forEach(d => {
+          digitCount[d] = (digitCount[d] || 0) + 1;
+          allDigits.push(d);
         });
       });
 
-      const top4 = frekuensi
-        .map((jumlah, digit) => ({ digit, jumlah }))
-        .sort((a, b) => b.jumlah - a.jumlah)
-        .slice(0, 4)
-        .map(item => item.digit);
+      const sortedDigits = Object.entries(digitCount).sort((a, b) => b[1] - a[1]);
+      const top4 = sortedDigits.slice(0, 4).map(d => d[0]);
+      const bottom4 = sortedDigits.slice(-4).map(d => d[0]);
 
-      const hasil = `📊 Frekuensi Digit (0–9):\n` +
-        frekuensi.map((f, i) => `${i}: ${f}x`).join("\n") +
-        `\n\n🎯 Prediksi 4D Jitu: ${top4.join('')}`;
+      const utama4D = top4.join('');
+      const cadangan4D = bottom4.reverse().join('');
 
-      document.getElementById("output").innerText = hasil;
+      const angka3D = utama4D.slice(1);
+      const angka2D = utama4D.slice(2);
+
+      hasil.innerHTML = `
+        <p>🎯 <strong>4D Utama:</strong> ${utama4D}</p>
+        <p>📦 <strong>4D Cadangan:</strong> ${cadangan4D}</p>
+        <p>🔢 <strong>3D:</strong> ${angka3D}</p>
+        <p>🎯 <strong>2D:</strong> ${angka2D}</p>
+      `;
+      hasil.style.display = 'block';
     }
   </script>
 </body>
