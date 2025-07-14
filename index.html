@@ -4,48 +4,83 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kalkulator Silang Togel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 50px;
-      background: #f0f0f0;
+      font-family: 'Inter', sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
     }
+
+    .container {
+      background: white;
+      padding: 40px;
+      margin-top: 50px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 90%;
+    }
+
     h1 {
-      margin-bottom: 20px;
+      text-align: center;
+      color: #222;
+      margin-bottom: 30px;
     }
+
     textarea {
-      width: 300px;
+      width: 100%;
       height: 120px;
       font-size: 16px;
-      padding: 10px;
-      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: none;
+      margin-bottom: 20px;
     }
+
     button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 5px;
-      cursor: pointer;
-      background-color: #007bff;
+      background-color: #2d89ef;
       color: white;
       border: none;
-      border-radius: 5px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
     }
+
+    button:hover {
+      background-color: #1b64c3;
+    }
+
     .hasil {
-      margin-top: 20px;
-      font-size: 18px;
-      font-weight: bold;
+      margin-top: 30px;
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
       white-space: pre-wrap;
+      font-size: 15px;
     }
   </style>
 </head>
 <body>
-  <h1>🔢 Kalkulator Silang Togel</h1>
-  <p>Masukkan 10 angka 4D terakhir (pisahkan dengan koma):</p>
-  <textarea id="input10"></textarea>
-  <br />
-  <button onclick="prediksi4D()">🎯 Prediksi Angka Jitu</button>
-  <div class="hasil" id="output"></div>
+  <div class="container">
+    <h1>🔮 Kalkulator Silang Togel</h1>
+    <p>Masukkan 10 angka 4D terakhir (pisahkan dengan koma):</p>
+    <textarea id="input10" placeholder="Contoh: 4123,9801,7634,..."></textarea>
+    <button onclick="prediksi4D()">🎯 Prediksi Angka Jitu</button>
+    <div class="hasil" id="output"></div>
+  </div>
 
   <script>
     function prediksi4D() {
@@ -80,3 +115,4 @@
   </script>
 </body>
 </html>
+
