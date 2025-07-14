@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rumus Silang Togel</title>
+  <title>Kalkulator Silang Togel</title>
   <style>
     body {
       font-family: sans-serif;
@@ -14,15 +14,17 @@
     h1 {
       margin-bottom: 20px;
     }
-    input[type="text"] {
+    textarea {
+      width: 300px;
+      height: 120px;
+      font-size: 16px;
       padding: 10px;
-      font-size: 20px;
-      width: 200px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     button {
       padding: 10px 20px;
-      font-size: 18px;
+      font-size: 16px;
+      margin: 5px;
       cursor: pointer;
       background-color: #007bff;
       color: white;
@@ -30,20 +32,51 @@
       border-radius: 5px;
     }
     .hasil {
-      margin-top: 30px;
-      font-size: 24px;
+      margin-top: 20px;
+      font-size: 18px;
       font-weight: bold;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
-  <h1>🔢 Rumus Silang Togel</h1>
-  <input type="text" id="input4D" placeholder="Masukkan 4D (cth: 1234)" maxlength="4" />
+  <h1>🔢 Kalkulator Silang Togel</h1>
+  <p>Masukkan 10 angka 4D terakhir (pisahkan dengan koma):</p>
+  <textarea id="input10"></textarea>
   <br />
-  <button onclick="hitungSilang()">Hitung Silang</button>
-
+  <button onclick="prediksi4D()">🎯 Prediksi Angka Jitu</button>
   <div class="hasil" id="output"></div>
 
-  <script type="module" src="./main.jsx"></script>
+  <script>
+    function prediksi4D() {
+      const rawInput = document.getElementById("input10").value;
+      const angkaList = rawInput.split(',').map(s => s.trim()).filter(s => /^\d{4}$/.test(s));
+
+      if (angkaList.length !== 10) {
+        document.getElementById("output").innerText = "Harus 10 angka 4D valid (cth: 1234,5678,...).";
+        return;
+      }
+
+      const frekuensi = Array(10).fill(0);
+
+      angkaList.forEach(angka => {
+        angka.split('').forEach(d => {
+          frekuensi[parseInt(d)]++;
+        });
+      });
+
+      const top4 = frekuensi
+        .map((jumlah, digit) => ({ digit, jumlah }))
+        .sort((a, b) => b.jumlah - a.jumlah)
+        .slice(0, 4)
+        .map(item => item.digit);
+
+      const hasil = `📊 Frekuensi Digit (0–9):\n` +
+        frekuensi.map((f, i) => `${i}: ${f}x`).join("\n") +
+        `\n\n🎯 Prediksi 4D Jitu: ${top4.join('')}`;
+
+      document.getElementById("output").innerText = hasil;
+    }
+  </script>
 </body>
 </html>
