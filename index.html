@@ -91,44 +91,83 @@
   </div>
 
   <script>
-    function prediksiUtamaCadangan() {
-      const input = document.getElementById('inputAngka').value;
-      const hasil = document.getElementById('hasil');
-      const angkaArray = input.split(',').map(a => a.trim()).filter(a => a.length === 4);
-
-      if (angkaArray.length !== 10) {
-        alert('Masukkan tepat 10 angka 4D.');
-        return;
-      }
-
-      const digitCount = {};
-      let allDigits = [];
-
-      angkaArray.forEach(num => {
-        num.split('').forEach(d => {
-          digitCount[d] = (digitCount[d] || 0) + 1;
-          allDigits.push(d);
-        });
-      });
-
-      const sortedDigits = Object.entries(digitCount).sort((a, b) => b[1] - a[1]);
-      const top4 = sortedDigits.slice(0, 4).map(d => d[0]);
-      const bottom4 = sortedDigits.slice(-4).map(d => d[0]);
-
-      const utama4D = top4.join('');
-      const cadangan4D = bottom4.reverse().join('');
-
-      const angka3D = utama4D.slice(1);
-      const angka2D = utama4D.slice(2);
-
-      hasil.innerHTML = `
-        <p>🎯 <strong>4D Utama:</strong> ${utama4D}</p>
-        <p>📦 <strong>4D Cadangan:</strong> ${cadangan4D}</p>
-        <p>🔢 <strong>3D:</strong> ${angka3D}</p>
-        <p>🎯 <strong>2D:</strong> ${angka2D}</p>
-      `;
-      hasil.style.display = 'block';
+    <script>
+  function generateBBFSFromLast10(results) {
+    if (results.length !== 10) {
+      throw new Error("Harus 10 keluaran terakhir 4D!");
     }
+
+    const frequency = Array(10).fill(0);
+
+    results.forEach(num => {
+      if (num.length !== 4) throw new Error("Format keluaran harus 4 digit");
+      num.split('').forEach(digit => {
+        frequency[parseInt(digit)]++;
+      });
+    });
+
+    const freqWithDigit = frequency.map((count, digit) => ({ digit, count }));
+    const sorted = [...freqWithDigit].sort((a, b) => b.count - a.count);
+
+    const mostFrequent = sorted.slice(0, 3).map(item => item.digit.toString());
+    const leastFrequent = sorted.slice(-3).map(item => item.digit.toString());
+
+    const bbfsPool = [...new Set([...mostFrequent, ...leastFrequent])];
+
+    if (bbfsPool.length < 6) {
+      const allDigits = [...Array(10).keys()].map(n => n.toString());
+      const extra = allDigits.filter(d => !bbfsPool.includes(d));
+      while (bbfsPool.length < 6 && extra.length > 0) {
+        const rand = extra.splice(Math.floor(Math.random() * extra.length), 1)[0];
+        bbfsPool.push(rand);
+      }
+    }
+
+    function getRandomCombination(arr, length) {
+      const shuffled = [...arr].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, length);
+    }
+
+    const combinations4D = Array.from({ length: 5 }, () => getRandomCombination(bbfsPool, 4).join(''));
+    const derived3D = combinations4D.map(item => item.slice(0, 3));
+    const derived2D = combinations4D.map(item => item.slice(-2));
+
+    return {
+      bbfs: bbfsPool.join(''),
+      kombinasi4D: combinations4D,
+      kombinasi3D: derived3D,
+      kombinasi2D: derived2D
+    };
+  }
+
+  function prediksiUtamaCadangan() {
+    const input = document.getElementById('inputAngka').value;
+    const hasil = document.getElementById('hasil');
+    const angkaArray = input.split(',').map(a => a.trim()).filter(a => a.length === 4);
+
+    if (angkaArray.length !== 10) {
+      alert('Masukkan tepat 10 angka 4D.');
+      return;
+    }
+
+    try {
+      const hasilPrediksi = generateBBFSFromLast10(angkaArray);
+
+      let html = `
+        <p>🎯 <strong>BBFS (6 angka):</strong> ${hasilPrediksi.bbfs}</p>
+        <p>🎰 <strong>Kombinasi 4D (acak):</strong><br> ${hasilPrediksi.kombinasi4D.join(', ')}</p>
+        <p>🔢 <strong>3D dari 4D:</strong><br> ${hasilPrediksi.kombinasi3D.join(', ')}</p>
+        <p>🎯 <strong>2D dari 4D:</strong><br> ${hasilPrediksi.kombinasi2D.join(', ')}</p>
+      `;
+
+      hasil.innerHTML = html;
+      hasil.style.display = 'block';
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  }
+</script>
+
   </script>
 </body>
 </html>
