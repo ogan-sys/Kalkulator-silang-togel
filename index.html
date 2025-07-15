@@ -137,7 +137,7 @@
         }
 
         const combinations4D = Array.from({ length: 2 }, () => getRandomCombination(bbfsPool, 4).join(''));
-        const derived3D = combinations4D.map(item => item.slice(0, 3));
+        const derived3D = combinations4D.map(item => item.slice(1, 4));
         const derived2D = combinations4D.map(item => item.slice(-2));
 
         return {
