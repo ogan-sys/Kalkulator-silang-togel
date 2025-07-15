@@ -193,11 +193,11 @@
             }, 1000);
 
             setTimeout(() => {
-              hasil.innerHTML += `<p>🔢 <strong>3D dari 4D:</strong><br> ${hasilPrediksi.kombinasi3D.join(', ')}</p>`;
+              hasil.innerHTML += `<p>🔢 <strong>3D:</strong><br> ${hasilPrediksi.kombinasi3D.join(', ')}</p>`;
             }, 2000);
 
             setTimeout(() => {
-              hasil.innerHTML += `<p>🎯 <strong>2D dari 4D:</strong><br> ${hasilPrediksi.kombinasi2D.join(', ')}</p>`;
+              hasil.innerHTML += `<p>🎯 <strong>2D:</strong><br> ${hasilPrediksi.kombinasi2D.join(', ')}</p>`;
             }, 3000);
           } catch (err) {
             hasil.innerHTML = `<p style="color:red;">❌ ${err.message}</p>`;
