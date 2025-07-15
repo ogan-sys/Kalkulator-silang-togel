@@ -1,98 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kalkulator Silang Togel</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-    body {
-      background: #f6f9fc;
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
-    .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
-      max-width: 600px;
-      width: 100%;
-    }
-    h1 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #222;
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
-    p.subtitle {
-      text-align: center;
-      color: #666;
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-    }
-    textarea {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      resize: none;
-      min-height: 120px;
-    }
-    button {
-      margin-top: 1rem;
-      width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 12px;
-      background-color: #2563eb;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background-color: #1e40af;
-    }
-    .result {
-      margin-top: 2rem;
-      background: #f1f5f9;
-      border-left: 6px solid #2563eb;
-      padding: 1rem;
-      border-radius: 8px;
-    }
-    .result p {
-      margin: 0.5rem 0;
-      font-size: 1.05rem;
-    }
-    .result strong {
-      color: #111;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🔮 Kalkulator Silang Togel</h1>
-    <p class="subtitle">Masukkan 10 angka 4D terakhir (pisahkan dengan koma)</p>
-    <textarea id="inputAngka" placeholder="Contoh: 4123,9801,7634,..."></textarea>
-    <button onclick="prediksiUtamaCadangan()">🎯 Prediksi Sekarang</button>
-    <div id="hasil" class="result" style="display:none;"></div>
-  </div>
-
-  <script>
-    <script>
+<script>
   window.onload = function () {
+    // === FUNGSI HITUNG BBFS ===
     function generateBBFSFromLast10(results) {
       if (results.length !== 10) {
         throw new Error("Harus 10 keluaran terakhir 4D!");
@@ -141,11 +49,13 @@
       };
     }
 
+    // === AMBIL ELEMEN DOM ===
     const tombol = document.querySelector('button');
     const hasil = document.getElementById('hasil');
     const progressWrapper = document.getElementById('progressWrapper');
     const progressBar = document.getElementById('progressBar');
 
+    // === EVENT SAAT TOMBOL DIKLIK ===
     tombol.addEventListener('click', function () {
       const input = document.getElementById('inputAngka').value;
       const angkaArray = input.split(',').map(a => a.trim()).filter(a => a.length === 4);
@@ -155,7 +65,7 @@
         return;
       }
 
-      // Reset hasil & progress bar
+      // Reset hasil
       hasil.innerHTML = `<p style="font-style:italic; color:#444;">⏳ Memproses angka, harap tunggu...</p>`;
       hasil.style.display = 'block';
       progressWrapper.style.display = 'block';
@@ -163,7 +73,7 @@
       tombol.disabled = true;
       tombol.innerText = "🔄 Sedang memproses...";
 
-      // Animasi progress bar
+      // Jalankan progress bar
       let duration = 15000; // 15 detik
       let interval = 100;
       let progress = 0;
@@ -176,44 +86,38 @@
       }, interval);
 
       setTimeout(() => {
-  clearInterval(progressInterval);
+        clearInterval(progressInterval);
 
-  try {
-    const hasilPrediksi = generateBBFSFromLast10(angkaArray);
+        try {
+          const hasilPrediksi = generateBBFSFromLast10(angkaArray);
 
-    // Tampilkan BBFS dulu
-    hasil.innerHTML = `<p>🎯 <strong>BBFS (6 angka):</strong> ${hasilPrediksi.bbfs}</p>`;
+          hasil.innerHTML = `<p>🎯 <strong>BBFS (6 angka):</strong> ${hasilPrediksi.bbfs}</p>`;
 
-    // Step by step hasil
-    setTimeout(() => {
-      hasil.innerHTML += `<p>🎰 <strong>Kombinasi 4D (acak):</strong><br> ${hasilPrediksi.kombinasi4D.join(', ')}</p>`;
-    }, 1000);
+          setTimeout(() => {
+            hasil.innerHTML += `<p>🎰 <strong>Kombinasi 4D (acak):</strong><br> ${hasilPrediksi.kombinasi4D.join(', ')}</p>`;
+          }, 1000);
 
-    setTimeout(() => {
-      hasil.innerHTML += `<p>🔢 <strong>3D dari 4D:</strong><br> ${hasilPrediksi.kombinasi3D.join(', ')}</p>`;
-    }, 2000);
+          setTimeout(() => {
+            hasil.innerHTML += `<p>🔢 <strong>3D dari 4D:</strong><br> ${hasilPrediksi.kombinasi3D.join(', ')}</p>`;
+          }, 2000);
 
-    setTimeout(() => {
-      hasil.innerHTML += `<p>🎯 <strong>2D dari 4D:</strong><br> ${hasilPrediksi.kombinasi2D.join(', ')}</p>`;
-    }, 3000);
+          setTimeout(() => {
+            hasil.innerHTML += `<p>🎯 <strong>2D dari 4D:</strong><br> ${hasilPrediksi.kombinasi2D.join(', ')}</p>`;
+          }, 3000);
+        } catch (err) {
+          hasil.innerHTML = `<p style="color:red;">❌ ${err.message}</p>`;
+        }
 
-  } catch (err) {
-    hasil.innerHTML = `<p style="color:red;">❌ ${err.message}</p>`;
-  }
-
-  tombol.disabled = false;
-  tombol.innerText = "🎯 Prediksi Sekarang";
-  progressWrapper.style.display = 'none';
-  progressBar.style.width = '0%';
-}, duration);
-
-  
+        tombol.disabled = false;
+        tombol.innerText = "🎯 Prediksi Sekarang";
+        progressWrapper.style.display = 'none';
+        progressBar.style.width = '0%';
+      }, duration);
+    });
+  };
 </script>
-
-  
-</script>
-
-  </script>
-</body>
-</html>
-
+<div id="progressWrapper" style="display:none; margin-top: 1rem;">
+  <div style="height: 10px; background: #e2e8f0; border-radius: 10px; overflow: hidden;">
+    <div id="progressBar" style="height: 100%; width: 0%; background: #2563eb; transition: width 0.2s;"></div>
+  </div>
+</div>
